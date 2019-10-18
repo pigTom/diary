@@ -12,15 +12,15 @@
         <result column="description" property="description" />
         <result column="password_expired" property="passwordExpired" />
         <result column="password_lifetime" property="passwordLifetime" />
-        <result column="created_time" property="createdTime" />
-        <result column="creator_id" property="creatorId" />
-        <result column="updated_time" property="updatedTime" />
-        <result column="updated_id" property="updatedId" />
+        <result column="create_time" property="createTime" />
+        <result column="create_id" property="createId" />
+        <result column="update_time" property="updateTime" />
+        <result column="update_id" property="createId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, authentication_string, password_locked, account_locked, description, password_expired, password_lifetime, created_time, creator_id, updated_time, updated_id
+        id, name, authentication_string, password_locked, account_locked, description, password_expired, password_lifetime, create_time, create_id, update_time, update_id
     </sql>
 
     <select id="pageList" resultMap="BaseResultMap">

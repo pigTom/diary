@@ -2,11 +2,12 @@ package com.pigtom.diary.model.bean;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.time.LocalDateTime;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -36,12 +37,12 @@ public class SystemRolePrivilege implements Serializable {
      */
     private Long privilegeId;
 
-    private LocalDateTime createdTime;
+    private LocalDateTime createTime;
 
     /**
      * 创建人ID
      */
-    private Long creatorId;
+    private Long createId;
 
 
 }

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * <p>
@@ -29,10 +28,10 @@ public class SystemUserController {
     @PostMapping
     private ResponseEntity addSystemUser(@RequestBody SystemUser user) {
 
-        user.setCreatedTime(LocalDateTime.now());
-        user.setCreatorId(1L);
-        user.setUpdatedId(1L);
-        user.setUpdatedTime(LocalDateTime.now());
+        user.setCreateTime(LocalDateTime.now());
+        user.setCreateId(1L);
+        user.setUpdateId(1L);
+        user.setUpdateTime(LocalDateTime.now());
         systemUserService.save(user);
         return ResponseEntity.success();
     }

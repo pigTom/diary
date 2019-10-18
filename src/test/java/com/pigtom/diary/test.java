@@ -1,8 +1,12 @@
 package com.pigtom.diary;
 
+import com.pigtom.diary.common.BeanUtil;
+import com.pigtom.diary.model.bean.SystemRole;
 import org.junit.Test;
 
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author tangdunhong
@@ -35,4 +39,18 @@ public class test {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void testMapToOBject (){
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", "tang");
+        map.put("description", "test");
+        try {
+            SystemRole role = BeanUtil.mapToEntity(map, SystemRole.class);
+        } catch (InstantiationException| IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        throw new RuntimeException("hahaha");
+    }
+
 }

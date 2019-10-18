@@ -68,20 +68,20 @@ public class SystemUser implements Serializable {
     /**
      * 创建时间
      */
-    private LocalDateTime createdTime;
+    private LocalDateTime createTime;
 
     /**
      * 创建者ID
      */
-    private Long creatorId;
+    private Long createId;
 
     /**
      * 最后更新时间
      */
-    private LocalDateTime updatedTime;
+    private LocalDateTime updateTime;
 
     /**
      * 最后更新人ID
      */
-    private Long updatedId;
+    private Long updateId;
 }

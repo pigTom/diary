@@ -7,13 +7,13 @@
         <id column="id" property="id" />
         <result column="name" property="name" />
         <result column="description" property="description" />
-        <result column="created_time" property="createdTime" />
-        <result column="creator_id" property="creatorId" />
+        <result column="create_time" property="createTime" />
+        <result column="create_id" property="createId" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, name, description, created_time, creator_id
+        id, name, description, create_time, create_id
     </sql>
 
 </mapper>

@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 /**
  * <p>
@@ -30,9 +29,9 @@ public class SystemRoleController {
     @PostMapping
     public ResponseEntity add(@RequestBody SystemRole role) {
 
-        role.setCreatedTime(LocalDateTime.now());
-        role.setCreatorId(0L);
-        role.setUpdatedTime(LocalDateTime.now());
+        role.setCreateTime(LocalDateTime.now());
+        role.setCreateId(0L);
+        role.setUpdateTime(LocalDateTime.now());
         systemRoleService.save(role);
         return ResponseEntity.success();
     }
@@ -44,7 +43,7 @@ public class SystemRoleController {
     }
     @PutMapping
     public ResponseEntity update(@RequestBody SystemRole role) {
-        role.setUpdatedTime(LocalDateTime.now());
+        role.setUpdateTime(LocalDateTime.now());
         systemRoleService.updateById(role);
         return ResponseEntity.success();
     }
