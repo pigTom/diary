@@ -1,4 +1,4 @@
-package com.pigtom.diary.common;
+package com.pigtom.diary.util;
 
 import java.lang.reflect.Field;
 import java.util.Map;

@@ -6,10 +6,15 @@ import com.pigtom.diary.common.ResponseEntity;
 import com.pigtom.diary.model.bean.SystemUser;
 import com.pigtom.diary.model.query.SystemUserQuery;
 import com.pigtom.diary.service.SystemUserService;
+import com.pigtom.diary.util.ExcelUtil;
+import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -27,11 +32,13 @@ public class SystemUserController {
 
     @PostMapping
     private ResponseEntity addSystemUser(@RequestBody SystemUser user) {
-
-        user.setCreateTime(LocalDateTime.now());
+        Date now = new Date();
+        user.setCreateTime(now);
         user.setCreateId(1L);
         user.setUpdateId(1L);
-        user.setUpdateTime(LocalDateTime.now());
+        user.setUpdateTime(now);
+        String md5Pass = MD5Encoder.encode(user.getAuthenticationString().getBytes());
+        user.setAuthenticationString(md5Pass);
         systemUserService.save(user);
         return ResponseEntity.success();
     }
@@ -57,5 +64,19 @@ public class SystemUserController {
     private ResponseEntity<SystemUser> get(@PathVariable Long id) {
         SystemUser user = systemUserService.getById(id);
         return ResponseEntity.success(user);
+    }
+
+    /**
+     * export excel
+     */
+    @GetMapping("export-excel")
+    public ResponseEntity exportExcel(
+                                      HttpServletRequest request,
+                                      HttpServletResponse response)
+            throws Exception {
+        ExcelUtil.handleResponse(request, response, "users");
+        List<SystemUser> list = systemUserService.getList(new SystemUserQuery()).getList();
+        ExcelUtil.writeDataToOutputStream(list, SystemUser.class, response.getOutputStream());
+        return ResponseEntity.success();
     }
 }

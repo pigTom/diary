@@ -74,3 +74,5 @@ insert into system_role_privilege (role_id, privilege_id, create_id) VALUES (2, 
 
 insert into system_user (name, authentication_string, description, create_id, update_id) VALUES
   ('root', md5('123456'), '根用户，具有超级管理员权限',0, 0);
+
+alter table system_user add role_id bigint comment '角色ID';

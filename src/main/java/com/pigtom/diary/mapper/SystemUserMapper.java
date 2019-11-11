@@ -1,8 +1,8 @@
 package com.pigtom.diary.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.github.pagehelper.Page;
 import com.pigtom.diary.model.bean.SystemUser;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.pigtom.diary.model.query.SystemUserQuery;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -23,4 +23,6 @@ public interface SystemUserMapper extends BaseMapper<SystemUser> {
      * @return 分布列表
      */
     Page<SystemUser> pageList(@Param("query") SystemUserQuery query);
+    
+    
 }
