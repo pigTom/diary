@@ -34,6 +34,7 @@ public class SystemUserController {
     private ResponseEntity addSystemUser(@RequestBody SystemUser user) {
         Date now = new Date();
         user.setCreateTime(now);
+        user.setCreateTime(now);
         user.setCreateId(1L);
         user.setUpdateId(1L);
         user.setUpdateTime(now);

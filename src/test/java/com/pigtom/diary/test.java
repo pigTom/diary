@@ -134,6 +134,21 @@ public class test {
         System.out.println(bd);
     }
 
+    private void testDelete(List<String> list) {
+        Iterator<String> iterator = list.iterator();
+        String next = iterator.next();
+        next = iterator.next();
+        iterator.remove();
+    }
+    @Test
+    public void testListDelete() {
+        List<String> list = new ArrayList<>();
+        list.add("HHHAAA ");
+        list.add("2131");
+        list.add("213100000");
+        testDelete(list);
+        System.out.println("list = " + list);;
+    }
 }
 
 enum A{

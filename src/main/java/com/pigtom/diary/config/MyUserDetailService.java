@@ -1,4 +1,4 @@
-package com.pigtom.diary.service.impl;
+package com.pigtom.diary.config;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.pigtom.diary.mapper.SystemRoleMapper;
@@ -21,7 +21,7 @@ import java.util.Collections;
  * @module diary
  * @since 2019/11/10 4:08 PM
  **/
-@Service
+@Service("userDetailsService")
 public class MyUserDetailService implements UserDetailsService {
     @Resource
     private SystemUserMapper systemUserMapper;
