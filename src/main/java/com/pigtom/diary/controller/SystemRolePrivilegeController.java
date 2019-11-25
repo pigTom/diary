@@ -2,8 +2,9 @@ package com.pigtom.diary.controller;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
+
+import static com.pigtom.diary.config.RestApiUrl.BASE_API;
 
 /**
  * <p>
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-10-01
  */
 @RestController
-@RequestMapping("/system-role-privilege")
+@RequestMapping(BASE_API + "system_role_privilege")
 public class SystemRolePrivilegeController {
 
 }

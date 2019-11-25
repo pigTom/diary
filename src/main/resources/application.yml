@@ -41,3 +41,13 @@ mybatis-plus:
         map-underscore-to-camel-case: true
         cache-enabled: false
         call-setters-on-nulls: true
+
+
+
+######## 分页插件PageHelper配置 #############
+pagehelper:
+  auto-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  page-size-zero: true
+  params: count countSql

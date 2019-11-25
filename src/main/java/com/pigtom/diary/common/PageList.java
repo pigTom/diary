@@ -18,14 +18,18 @@ public class PageList<T>  extends Pager {
      */
     private List<T> list;
 
+    private long total;
+
     public PageList(){}
 
     public PageList(List<T> list) {
         if (list instanceof Page) {
             Page<T> page = ((Page<T>)list);
             this.list = page.getResult();
-            setPageIndex(page.getPageNum());
-            setPageSize(getPageSize());
+            this.setPageIndex(page.getPageNum());
+            this.setPageSize(page.getPageSize());
+            long total = page.getTotal();
+            this.setTotal(page.getTotal());
         }
         else {
             this.list = list;

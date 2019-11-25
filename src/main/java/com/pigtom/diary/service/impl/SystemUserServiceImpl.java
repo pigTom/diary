@@ -1,14 +1,13 @@
 package com.pigtom.diary.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.pigtom.diary.common.PageList;
-import com.pigtom.diary.model.bean.SystemUser;
 import com.pigtom.diary.mapper.SystemUserMapper;
+import com.pigtom.diary.model.bean.SystemUser;
 import com.pigtom.diary.model.query.SystemUserQuery;
 import com.pigtom.diary.service.SystemUserService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -32,8 +31,7 @@ public class SystemUserServiceImpl extends ServiceImpl<SystemUserMapper, SystemU
         Integer pageSize = query.getPageSize();
         PageHelper.startPage(pageNum, pageSize);
         Page<SystemUser> page = systemUserMapper.pageList(query);
-
-        long total = page.getTotal();
+        System.out.println(page.getTotal());
         return new PageList<>(page);
     }
 }

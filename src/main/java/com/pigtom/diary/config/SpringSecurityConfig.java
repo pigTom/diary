@@ -12,8 +12,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.firewall.DefaultHttpFirewall;
+import org.springframework.security.web.firewall.HttpFirewall;
 
 import javax.sql.DataSource;
+
+import static com.pigtom.diary.config.RestApiUrl.BASE_API;
 
 /**
  * @author tangdunhong
@@ -33,6 +37,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
+
     @Bean
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
@@ -55,15 +60,26 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/authenticate").permitAll()
+                .antMatchers("/v2/api-docs").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/configuration/ui").permitAll()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/configuration/security").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers(BASE_API + "/authenticate/*").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-//                .antMatchers("/").permitAll()
-//                .antMatchers("/api/v0.1/*").hasAnyRole("ADMIN", "normal")
-//                .antMatchers("user").hasAnyRole("USER", "normal")
-//                .and().formLogin();
     }
 
+
+    /**
+     * 允许请求中多加斜杠
+     * @return httpFireWall
+     */
+    @Bean
+    public HttpFirewall httpFirewall() {
+        return new DefaultHttpFirewall();
+    }
 }

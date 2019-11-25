@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * 每次请求都会调用的方法
  * @author tangdunhong
  * @blame tangdunhong
  * @module diary
@@ -35,14 +36,23 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String jwt = null;
 
+        // 如果请求头中有authorization, 则将authorization中的jwt拿出
+        // 并将jwt解析，获取用户名
         if (authorizationHeader != null && authorizationHeader.startsWith(BEARER)) {
             jwt = authorizationHeader.substring(BEARER.length());
-            username = jwtUtil.extractUsername(jwt);
+            if (jwtUtil.validateToken(jwt)) {
+                username = jwtUtil.extractUsername(jwt);
+            }
         }
 
+        // 用户名为真,且该用户没有放入SpringContextHolder.context中
+        // 先验证jwt是否合法，如果合法将生成一个合法的authentication并放入
+        // SecurityContextHolder的context中，保证这一次的请求可以顺利通过
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            // 根据用户名查询用户信息
             UserDetails userDetails = this.userDetailService.loadUserByUsername(username);
-            if (jwtUtil.validateToken(jwt, userDetails)) {
+
+            if (jwtUtil.validateUser(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken

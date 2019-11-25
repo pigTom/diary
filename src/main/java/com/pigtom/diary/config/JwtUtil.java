@@ -3,6 +3,7 @@ package com.pigtom.diary.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -50,12 +51,25 @@ public class JwtUtil {
     private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
+                // 过期时间10个小时
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    public boolean validateToken(String token) {
+        try {
+            String signature = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getSignature();
+            return (SECRET_KEY.equals(signature));
+        } catch (SignatureException exception) {
+            return false;
+        }
+    }
+
+    public boolean validateUser(String token, UserDetails userDetails) {
+        if (validateToken(token)) {
+            String username = extractUsername(token);
+            return username.equals(userDetails.getUsername());
+        }
+        return false;
     }
 }

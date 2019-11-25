@@ -7,6 +7,7 @@ import com.pigtom.diary.model.bean.SystemUser;
 import com.pigtom.diary.model.query.SystemUserQuery;
 import com.pigtom.diary.service.SystemUserService;
 import com.pigtom.diary.util.ExcelUtil;
+import io.swagger.annotations.Api;
 import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
+
+import static com.pigtom.diary.config.RestApiUrl.BASE_API;
 
 /**
  * <p>
@@ -25,7 +28,8 @@ import java.util.List;
  * @since 2019-10-01
  */
 @RestController
-@RequestMapping("/api/v0.1/system-user")
+@Api(value = "SystemUserController", description = "系统用户管理")
+@RequestMapping(BASE_API + "system_user")
 public class SystemUserController {
     @Autowired
     private SystemUserService systemUserService;

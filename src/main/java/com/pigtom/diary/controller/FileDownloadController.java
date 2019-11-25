@@ -12,6 +12,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.pigtom.diary.config.RestApiUrl.BASE_API;
+
 /**
  * @author tangdunhong
  * @blame tangdunhong
@@ -19,7 +21,7 @@ import java.util.List;
  * @since 2019/10/16 3:48 PM
  **/
 @RestController
-@RequestMapping("/api/v0.1/file")
+@RequestMapping(BASE_API + "file")
 public class FileDownloadController {
     @GetMapping("a.pdf")
     public ResponseEntity download(HttpServletRequest request, HttpServletResponse response) {

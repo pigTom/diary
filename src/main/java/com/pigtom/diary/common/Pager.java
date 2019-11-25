@@ -23,10 +23,4 @@ public class Pager implements Serializable {
      * 每页大小
      */
     private Integer pageSize = 20;
-
-    /**
-     * 总记录数
-     */
-    private Long total;
-
 }

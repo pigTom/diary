@@ -6,10 +6,14 @@ import com.pigtom.diary.common.ResponseEntity;
 import com.pigtom.diary.model.bean.SystemRole;
 import com.pigtom.diary.model.query.SystemRoleQuery;
 import com.pigtom.diary.service.SystemRoleService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+
+import static com.pigtom.diary.config.RestApiUrl.BASE_API;
 
 /**
  * <p>
@@ -19,13 +23,15 @@ import java.time.LocalDateTime;
  * @author pigtom
  * @since 2019-10-01
  */
+@Api(value = "SystemRoleController", description = "用户角色接口")
 @RestController
-@RequestMapping("/api/v0.1/system-role")
+@RequestMapping(BASE_API + "system_role")
 public class SystemRoleController {
 
     @Autowired
     private SystemRoleService systemRoleService;
 
+    @ApiOperation("新增角色")
     @PostMapping
     public ResponseEntity add(@RequestBody SystemRole role) {
 
@@ -36,6 +42,7 @@ public class SystemRoleController {
         return ResponseEntity.success();
     }
 
+    @ApiOperation("删除角色")
     @DeleteMapping("{id}")
     public ResponseEntity delete(@PathVariable Long id) {
         systemRoleService.removeById(id);
