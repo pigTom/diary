@@ -3,7 +3,6 @@ package com.pigtom.diary.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.SignatureException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,7 @@ import java.util.function.Function;
  **/
 @Service
 public class JwtUtil {
-    private String SECRET_KEY = "DIARY_SECRET";
+    private static final String SECRET_KEY = "DIARY_SECRET";
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -56,11 +55,10 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
-    public boolean validateToken(String token) {
+    boolean validateToken(String token) {
         try {
-            String signature = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getSignature();
-            return (SECRET_KEY.equals(signature));
-        } catch (SignatureException exception) {
+            return !isTokenExpired(token);
+        } catch (Exception exception) {
             return false;
         }
     }

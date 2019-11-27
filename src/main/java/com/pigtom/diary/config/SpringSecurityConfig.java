@@ -56,21 +56,30 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    @Bean
+    public CorsFilter corsFilter() throws Exception {
+        return new CorsFilter();
+    }
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/v2/api-docs").permitAll()
-                .antMatchers("/swagger-resources/**").permitAll()
-                .antMatchers("/configuration/ui").permitAll()
-                .antMatchers("/swagger-ui.html").permitAll()
-                .antMatchers("/configuration/security").permitAll()
-                .antMatchers("/webjars/**").permitAll()
-                .antMatchers(BASE_API + "/authenticate/*").permitAll()
+                .antMatchers(
+                        "/v2/api-docs",
+                        "/swagger-resources/**",
+                        "/configuration/ui",
+                        "/swagger-ui.html",
+                        "/configuration/security",
+                        "/webjars/**",
+                        BASE_API + "authenticate/*").permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+        http.addFilterBefore(corsFilter(), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        // 禁用页面缓存
+        http.headers().cacheControl();
     }
 
 

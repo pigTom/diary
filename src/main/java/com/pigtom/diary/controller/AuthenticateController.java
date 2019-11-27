@@ -5,7 +5,6 @@ import com.pigtom.diary.config.AuthenticationRequest;
 import com.pigtom.diary.config.AuthenticationResponse;
 import com.pigtom.diary.config.JwtUtil;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -37,22 +36,16 @@ public class AuthenticateController {
     private JwtUtil jwtUtil;
 
     /**
-     * authenticate方法会使其重定向到这个方法
+     * login 登入
      * @param request 请求
      * @return
      * @throws Exception
      */
-    @ApiOperation(value = "登录")
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AuthenticationRequest request) throws Exception{
-        return authenticate(request);
-    }
-
-    @PostMapping("/authenticate")
-    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) throws Exception{
+    public ResponseEntity<?> login(@RequestBody AuthenticationRequest request) throws Exception{
 
         try {
-            // 通过authentication manager 去验证
+//             通过authentication manager 去验证
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
@@ -63,9 +56,4 @@ public class AuthenticateController {
         final String jwt = jwtUtil.generateToken(userDetails);
         return ResponseEntity.success(new AuthenticationResponse(jwt));
     }
-
-//    @PostMapping("/logout")
-//    public ResponseEntity<?> logout(@RequestBody AuthenticationRequest request) {
-//        authenticationManager.
-//    }
 }

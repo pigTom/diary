@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import static com.pigtom.diary.config.RestApiUrl.BASE_API;
 
@@ -35,9 +35,9 @@ public class SystemRoleController {
     @PostMapping
     public ResponseEntity add(@RequestBody SystemRole role) {
 
-        role.setCreateTime(LocalDateTime.now());
+        role.setCreateTime(new Date());
         role.setCreateId(0L);
-        role.setUpdateTime(LocalDateTime.now());
+        role.setUpdateTime(new Date());
         systemRoleService.save(role);
         return ResponseEntity.success();
     }
@@ -50,7 +50,7 @@ public class SystemRoleController {
     }
     @PutMapping
     public ResponseEntity update(@RequestBody SystemRole role) {
-        role.setUpdateTime(LocalDateTime.now());
+        role.setUpdateTime(new Date());
         systemRoleService.updateById(role);
         return ResponseEntity.success();
     }

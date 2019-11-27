@@ -8,8 +8,8 @@ import com.pigtom.diary.model.query.SystemUserQuery;
 import com.pigtom.diary.service.SystemUserService;
 import com.pigtom.diary.util.ExcelUtil;
 import io.swagger.annotations.Api;
-import org.apache.tomcat.util.security.MD5Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,38 +35,37 @@ public class SystemUserController {
     private SystemUserService systemUserService;
 
     @PostMapping
-    private ResponseEntity addSystemUser(@RequestBody SystemUser user) {
+    public ResponseEntity addSystemUser(@RequestBody SystemUser user) {
         Date now = new Date();
         user.setCreateTime(now);
         user.setCreateTime(now);
         user.setCreateId(1L);
         user.setUpdateId(1L);
         user.setUpdateTime(now);
-        String md5Pass = MD5Encoder.encode(user.getAuthenticationString().getBytes());
-        user.setAuthenticationString(md5Pass);
+        user.setAuthenticationString(new BCryptPasswordEncoder().encode(user.getAuthenticationString()));
         systemUserService.save(user);
         return ResponseEntity.success();
     }
 
     @DeleteMapping("{id}")
-    private ResponseEntity deleteSystemUser(@PathVariable Long id) {
+    public ResponseEntity deleteSystemUser(@PathVariable Long id) {
         systemUserService.removeById(id);
         return ResponseEntity.success();
     }
     @PutMapping
-    private ResponseEntity updateSystemUser(@RequestBody SystemUser user) {
+    public ResponseEntity updateSystemUser(@RequestBody SystemUser user) {
         systemUserService.updateById(user);
         return ResponseEntity.success();
     }
 
     @PostMapping("getList")
-    private ResponseEntity<PageList<SystemUser>> getSystemUserList(@RequestBody SystemUserQuery query) {
+    public ResponseEntity<PageList<SystemUser>> getSystemUserList(@RequestBody SystemUserQuery query) {
         PageList<SystemUser> pageList = systemUserService.getList(query);
         return ResponseEntity.success(pageList);
     }
 
     @GetMapping("{id}")
-    private ResponseEntity<SystemUser> get(@PathVariable Long id) {
+    public ResponseEntity<SystemUser> get(@PathVariable Long id) {
         SystemUser user = systemUserService.getById(id);
         return ResponseEntity.success(user);
     }

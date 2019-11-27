@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * <p>
@@ -37,7 +37,7 @@ public class SystemRolePrivilege implements Serializable {
      */
     private Long privilegeId;
 
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 创建人ID

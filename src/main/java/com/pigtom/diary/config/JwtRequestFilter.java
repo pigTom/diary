@@ -13,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Enumeration;
 
 /**
  * 每次请求都会调用的方法
@@ -33,6 +34,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
+        Enumeration<String> h = request.getHeaderNames();
+        System.out.println(h);
         String username = null;
         String jwt = null;
 

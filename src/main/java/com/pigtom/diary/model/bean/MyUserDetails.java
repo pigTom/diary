@@ -2,7 +2,6 @@ package com.pigtom.diary.model.bean;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
@@ -37,7 +36,8 @@ public class MyUserDetails implements UserDetails {
 
     public MyUserDetails(SystemUser user) {
         this.username = user.getName();
-        this.password =  new BCryptPasswordEncoder().encode(user.getAuthenticationString());
+        this.password = user.getAuthenticationString();
+//        this.password =  new BCryptPasswordEncoder().encode(user.getAuthenticationString());
         this.accountNonExpired = ! user.isPasswordLocked();
         this.accountNonLocked = ! user.isAccountLocked();
         this.credentialsNonExpired = ! user.isPasswordExpired();
