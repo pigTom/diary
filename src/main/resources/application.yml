@@ -52,3 +52,6 @@ pagehelper:
   support-methods-arguments: true
   page-size-zero: true
   params: count countSql
+
+server:
+  port: 8088

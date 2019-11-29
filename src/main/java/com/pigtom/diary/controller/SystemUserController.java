@@ -11,7 +11,6 @@ import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -40,18 +39,6 @@ public class SystemUserController {
     @Autowired
     private SystemUserService systemUserService;
 
-    @Value("${testval}")
-    private String testval;
-
-    @Value("${testval}")
-    public void setVal(String val) {
-        this.testval = val;
-    }
-    @GetMapping("/val")
-    public String port() {
-        return testval;
-    }
-
     @PostMapping
     public ResponseEntity addSystemUser(@RequestBody SystemUser user) {
         Date now = new Date();
@@ -78,7 +65,6 @@ public class SystemUserController {
 
     @PostMapping("getList")
     public ResponseEntity<PageList<SystemUser>> getSystemUserList(@RequestBody SystemUserQuery query) {
-        logger.error(testval);
         PageList<SystemUser> pageList = systemUserService.getList(query);
         return ResponseEntity.success(pageList);
     }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 
 @SpringBootApplication
-
 @RestController
 @RefreshScope
 public class App {
