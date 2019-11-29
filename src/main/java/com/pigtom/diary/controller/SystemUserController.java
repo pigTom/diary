@@ -11,7 +11,6 @@ import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +32,6 @@ import static com.pigtom.diary.config.RestApiUrl.BASE_API;
 @RestController
 @Api(value = "SystemUserController", description = "系统用户管理")
 @RequestMapping(BASE_API + "system_user")
-@RefreshScope
 public class SystemUserController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
