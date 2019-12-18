@@ -8,9 +8,11 @@ import com.pigtom.diary.mapper.SystemUserMapper;
 import com.pigtom.diary.model.bean.SystemUser;
 import com.pigtom.diary.model.query.SystemUserQuery;
 import com.pigtom.diary.service.SystemUserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * <p>
@@ -24,6 +26,17 @@ import javax.annotation.Resource;
 public class SystemUserServiceImpl extends ServiceImpl<SystemUserMapper, SystemUser> implements SystemUserService {
     @Resource
     private SystemUserMapper systemUserMapper;
+
+    @Override
+    public void add(SystemUser user) {
+        Date now = new Date();
+        user.setCreateTime(now);
+        user.setCreateTime(now);
+        user.setCreateId(1L);
+        user.setUpdateId(1L);
+        user.setUpdateTime(now);
+        user.setAuthenticationString(new BCryptPasswordEncoder().encode(user.getAuthenticationString()));
+    }
 
     @Override
     public PageList<SystemUser> getList(SystemUserQuery query) {

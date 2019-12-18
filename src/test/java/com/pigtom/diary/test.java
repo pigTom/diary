@@ -46,7 +46,7 @@ public class test {
     public void testMapToOBject() {
         Map<String, Object> map = new HashMap<>();
         map.put("name", "tang");
-        map.put("description", "test");
+        map.put("description", "testconfig");
         try {
             SystemRole role = BeanUtil.mapToEntity(map, SystemRole.class);
         } catch (InstantiationException | IllegalAccessException e) {

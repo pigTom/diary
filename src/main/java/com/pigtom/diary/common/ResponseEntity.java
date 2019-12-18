@@ -10,6 +10,7 @@ import lombok.Data;
  **/
 @Data
 public class ResponseEntity<T> {
+    ResponseEntity() {}
     private final static String SUCCESS = "success";
     private final static String FAILED = "failed";
 

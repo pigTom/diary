@@ -11,12 +11,10 @@ import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 import java.util.List;
 
 import static com.pigtom.diary.config.RestApiUrl.BASE_API;
@@ -39,14 +37,7 @@ public class SystemUserController {
 
     @PostMapping
     public ResponseEntity addSystemUser(@RequestBody SystemUser user) {
-        Date now = new Date();
-        user.setCreateTime(now);
-        user.setCreateTime(now);
-        user.setCreateId(1L);
-        user.setUpdateId(1L);
-        user.setUpdateTime(now);
-        user.setAuthenticationString(new BCryptPasswordEncoder().encode(user.getAuthenticationString()));
-        systemUserService.save(user);
+       systemUserService.save(user);
         return ResponseEntity.success();
     }
 

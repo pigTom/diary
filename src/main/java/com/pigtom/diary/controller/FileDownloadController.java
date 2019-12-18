@@ -76,7 +76,7 @@ public class FileDownloadController {
 
     @GetMapping("exportExcel")
     ResponseEntity downloadExcel(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        String filename = "test-excel";
+        String filename = "testconfig-excel";
         ExcelUtil.handleResponse(request, response, filename);
         List<String> data = new ArrayList<>(10);
 

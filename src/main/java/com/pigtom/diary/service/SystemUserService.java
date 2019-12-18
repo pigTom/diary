@@ -1,8 +1,8 @@
 package com.pigtom.diary.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.pigtom.diary.common.PageList;
 import com.pigtom.diary.model.bean.SystemUser;
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.pigtom.diary.model.query.SystemUserQuery;
 
 /**
@@ -14,5 +14,8 @@ import com.pigtom.diary.model.query.SystemUserQuery;
  * @since 2019-10-01
  */
 public interface SystemUserService extends IService<SystemUser> {
+
+    void add(SystemUser user);
+
     PageList<SystemUser> getList(SystemUserQuery query);
 }
