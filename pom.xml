@@ -19,12 +19,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <spring-cloud.version>Greenwich.SR4</spring-cloud.version>
+        <docker.image.prefix>springboot</docker.image.prefix>
     </properties>
 
     <dependencies>
 
         <!-- ******* SPRING START *******-->
-        <!--spring boot test-->
+        <!--spring boot testconfig-->
         <dependency >
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -146,6 +147,17 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
+        <!--yaml-->
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.9</version>
+        </dependency>
     </dependencies>
 
 
@@ -185,6 +197,28 @@
             <!--</dependency>-->
             <!--</dependencies>-->
             <!--</plugin>-->
+
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- Docker maven plugin -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <version>1.0.0</version>
+                <configuration>
+                    <imageName>${docker.image.prefix}/${project.artifactId}</imageName>
+                    <dockerDirectory>src/main/docker</dockerDirectory>
+                    <resources>
+                        <resource>
+                            <targetPath>/</targetPath>
+                            <directory>${project.build.directory}</directory>
+                            <include>${project.build.finalName}.jar</include>
+                        </resource>
+                    </resources>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
     <dependencyManagement>

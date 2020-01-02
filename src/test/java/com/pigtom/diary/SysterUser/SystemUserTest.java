@@ -7,6 +7,7 @@ import com.pigtom.diary.service.SystemUserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -22,10 +23,21 @@ public class SystemUserTest {
     @Autowired
     private SystemUserService systemUserService;
 
+    @Value("${value}")
+    private String name;
+
+    @Value("${a.tang.name}")
+    private String name2;
     @Test
     public void testPageList() {
         SystemUserQuery query = new SystemUserQuery();
         PageList<SystemUser> pageList = systemUserService.getList(query);
         System.out.println(pageList);
+    }
+
+    @Test
+    public void testName() {
+        System.out.println(name);
+        System.out.println(name2);
     }
 }

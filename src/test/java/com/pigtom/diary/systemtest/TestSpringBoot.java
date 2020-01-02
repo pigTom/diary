@@ -24,12 +24,12 @@ public class TestSpringBoot {
 
     @Test
     public void testRegex() {
-        String s = "fafaf fafda faa";
+        String s = "0000432424242fa";
         String s1 = "fafaf fafda faa{";
         String s2 = "fafaf fafda { faa}";
 
-        String regex = "[{}]";
-        System.out.println(s.replaceAll(regex," tang"));
+        String regex = "\\D|(?<=^0)\\d+";
+        System.out.println(s.replaceAll(regex,""));
         System.out.println(s1.replaceAll(regex, " tang"));
         System.out.println(s2.replaceAll(regex, " tang"));
     }
@@ -37,7 +37,7 @@ public class TestSpringBoot {
     @Test
     public void testSlash() {
         String text = "location ~ .*AAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB.(js|css)?$";
-
+        System.out.println(Integer.MAX_VALUE);
         System.out.println(text.replaceAll("AAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
                 "\\\\"));
     }
