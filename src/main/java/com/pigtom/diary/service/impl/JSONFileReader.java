@@ -13,7 +13,7 @@ public class JSONFileReader {
     public static void main(String[] args) {
         String path = "nginx.conf";
         String key = "http.server.listen";
-        String value = "8080";
+        String value = "80";
         ConfigFileHandleUtil.parseNginxConfig(path, key, value);
     }
 }

@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSONObject;
 import org.apache.logging.log4j.util.Strings;
 
 import java.io.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author tangdunhong
@@ -22,11 +24,11 @@ public class ConfigFileHandleUtil {
         String jsonContent = parseNginxToJSONStr(path);
         jsonContent = updateJSONContent(key, value, jsonContent);
         String formatJson = formatJsonStr(jsonContent);
-        String jsonConfig = "test.json";
-        writeStringToFile(jsonConfig, formatJson);
+//        String jsonConfig = "test.json";
+//        writeStringToFile(jsonConfig, formatJson);
 
-        String nginxConfig = parseJsonToNginx(jsonContent);
-        writeStringToFile("nginx-test.conf", nginxConfig);
+        String nginxConfig = parseJsonToNginx(formatJson);
+        writeStringToFile("nginx-2test.conf", nginxConfig);
     }
     /**
      * jsonContent必须是格式化好的json字符串，用换行符进行换行
@@ -35,7 +37,7 @@ public class ConfigFileHandleUtil {
      */
     private static String parseJsonToNginx(String jsonContent) {
         // jsonContent必须是格式化好的json字符串，用换行符进行换行
-        jsonContent = formatJsonStr(jsonContent);
+//        jsonContent = formatJsonStr(jsonContent);
 
 
         StringBuilder sb = new StringBuilder();
@@ -43,7 +45,8 @@ public class ConfigFileHandleUtil {
                 ;
         // i start from 1 and end with ss.length - 1
         for (int i = 1; i < ss.length-1; i++) {
-            String s  =ss[i];
+            String s = ss[i];
+            s = s.substring(2, s.length());
 
             // if s '}' or \r\n, just split ,
             if (!s.contains(":")) {
@@ -82,7 +85,8 @@ public class ConfigFileHandleUtil {
             }
             sb.append("\r\n");
         }
-        return sb.toString().replaceAll(REPLACEMENT, REPLACE).replaceAll(DOUBLE_QUOTAITON_REPLACE, "\"");
+        return sb.toString().replaceAll(REPLACEMENT, REPLACE).replaceAll(DOUBLE_QUOTAITON_REPLACE, "\"")
+                .replaceAll("\\\\t", "\t");
     }
 
     private static String formatJsonStr(String jsonContent) {
@@ -144,66 +148,118 @@ public class ConfigFileHandleUtil {
         return sb.toString();
     }
 
+
+    /**
+     *    // 重新想一个机制-> repeatDeep 用一个重复深度来标识进入重复内容的层数
+     *             // repeatDeep = 0 没有重复
+     *             // repeatDeep = 1 进入由key包围的第一层
+     *             // 用keySet存入已经加入的键
+     *             //
+     *             // key1 : {
+     *             //   key1-key1:{
+     *             //        key1-key1-key : value
+     *             //   }
+     *             // }
+     *             // key1 : {
+     *             //   key1-key1:{
+     *             //        key1-key1-key : value
+     *             //   }
+     *             //   key1-key2:{
+     *             //        key1-key2-key : value
+     *             //   }
+     *             // }
+     *             // 进入状态，
+     *             //
+     * @param path
+     * @return
+     */
     private static String parseNginxToJSONStr(String path) {
         String content = readStringFromFile(path);
         content = content.replaceAll("\"", DOUBLE_QUOTAITON_REPLACE);
         content = content.replaceAll(REPLACE, REPLACEMENT);
         String[] cs = content.split("\n");
         StringBuilder sb = new StringBuilder();
+        String splitSign = "::::::";
         sb.append("{\r\n");
+        Set<String> keySet = new HashSet<>(16);
+        int repeatDeep = 0;
+        String keyPrefix = "";
         for (String s : cs) {
             s = s.trim();
-
             // 去掉注释
             int commentIndex = s.indexOf("#");
             if (commentIndex != -1) {
                 s = s.substring(0, commentIndex);
             }
-
             if (Strings.isBlank(s)) {
                 continue;
             }
-
             // 去掉分号
             int semicolonIndex = s.lastIndexOf(";");
             if (semicolonIndex != -1) {
                 s = s.substring(0, semicolonIndex);
             }
-
-            // 在左大括号前加冒号,并把左大括号前的key加上引号
             if (s.endsWith("{")) {
+                //如果已经处于重复状态，则重复状态加1
+                if (repeatDeep > 0) {
+                    repeatDeep ++;
+                    continue;
+                }
+                // 在左大括号前加冒号,并把左大括号前的key加上引号
                 // 将{ 前的字符串当作key
                 String key = s.substring(0, s.length() - 2).trim();
-                sb.append("\"");
-                sb.append(key);
-                sb.append("\":{\n");
+                keyPrefix = keyPrefix + splitSign + key;
+                // 此键为重复键
+                if(keySet.contains(keyPrefix)) {
+                    repeatDeep++;
+                }
+                else {
+                    append(sb, "\"", key, "\":{\r\n");
+                    keySet.add(keyPrefix);
+                }
             }
 
+            // 走出状态
             // 在右大括号后加逗号
             else if (s.endsWith("}")) {
-                // 去掉逗号, 以 value + , 或者 } + ,的字符串
-                int commaIndex = sb.lastIndexOf(",");
-                if (commaIndex != -1) {
-                    sb.deleteCharAt(commaIndex);
+                // 如果还有重复状态，重复状态减一
+                if (repeatDeep > 0) {
+                    repeatDeep --;
                 }
-                sb.append("},\r\n");
+                // 如果不是重复状态，加入内容
+                else {
+                    int commaIndex = sb.lastIndexOf(",");
+                    if (commaIndex != -1) {
+                        sb.deleteCharAt(commaIndex);
+                    }
+                    sb.append("},\r\n");
+
+                    int splitIndex = keyPrefix.lastIndexOf(splitSign);
+                    if (splitIndex == -1) {
+                        throw new RuntimeException("出错，多了一个大括号'}'");
+                    }
+                    // 当前键前缀
+                    keyPrefix = keyPrefix.substring(0, splitIndex);
+                }
+
             }
 
+            // 步行状态，防止键值对重复，可将键加入keyMap中
             // 键值对，将第一节连续非空字符当作键， 后面的所有字符串当作值
-            else {
-                String[] ss = s.split("\\s", 2);
-                sb.append("\"");
-                String key = ss[0];
-                sb.append(key);
-                sb.append("\":\"");
-                String value="";
-                if (ss[1] != null) {
-                    value = ss[1].trim();
+            else if (repeatDeep == 0) {
+                // 不是重复状态
+                int lastSpaceIndex = getLastSpace(s.trim());
+                if (lastSpaceIndex == -1) {
+                    throw new RuntimeException(String.format("配置文件格式有错，出错行：%s", s));
                 }
-                sb.append(value);
-                sb.append("\",\n");
+                String key = s.substring(0, lastSpaceIndex);
+                // 如果键不存在，添加内容
+                if (!keySet.contains(keyPrefix + splitSign + key)) {
+                    String value = s.substring(lastSpaceIndex, s.length());
+                    append(sb, "\"", key, "\":\"",value, "\",\r\n");
+                    keySet.add(keyPrefix + splitSign + key);
+                }
             }
-
         }
         // 去掉逗号 } + ,
         int commaIndex = sb.lastIndexOf(",");
@@ -214,6 +270,20 @@ public class ConfigFileHandleUtil {
         return sb.toString();
     }
 
+    private static void append(StringBuilder sb, String... strings) {
+        for (String string : strings) {
+            sb.append(string);
+        }
+    }
+    private static int getLastSpace(String string) {
+        char[] chars = string.toCharArray();
+        for (int i = chars.length - 1; i >= 0; i--) {
+            if (chars[i] == ' ' || chars[i] == '\t') {
+                return i;
+            }
+        }
+        return -1;
+    }
     private static String getIntendSpace(int intend) {
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < intend; i++) {
