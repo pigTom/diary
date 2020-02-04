@@ -8,6 +8,7 @@ import com.pigtom.diary.mapper.SystemUserMapper;
 import com.pigtom.diary.model.bean.SystemUser;
 import com.pigtom.diary.model.query.SystemUserQuery;
 import com.pigtom.diary.service.SystemUserService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,16 @@ public class SystemUserServiceImpl extends ServiceImpl<SystemUserMapper, SystemU
     @Resource
     private SystemUserMapper systemUserMapper;
 
+    @Value("${test.name}")
+    private String name;
+
+    private String hobby;
+
+    @Value("${test.hobby")
+    private void setHobby(String hobby) {
+        this.hobby = hobby;
+        System.out.println(this.hobby);
+    }
     @Override
     public void add(SystemUser user) {
         Date now = new Date();

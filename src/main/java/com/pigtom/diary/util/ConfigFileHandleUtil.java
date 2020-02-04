@@ -270,7 +270,8 @@ public class ConfigFileHandleUtil {
         return sb.toString();
     }
 
-    private static void append(StringBuilder sb, String... strings) {
+    private static void
+    append(StringBuilder sb, String... strings) {
         for (String string : strings) {
             sb.append(string);
         }

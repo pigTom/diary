@@ -8,7 +8,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * config.get("spring.dev.a")
@@ -20,7 +22,6 @@ import java.util.*;
 public class SystemConfig extends HashMap<Object, Object>{
     private Logger logger = LoggerFactory.getLogger(SystemConfig.class);
     private static SystemConfig instance = new SystemConfig();
-    private Map activateMap;
     public static SystemConfig getSystemConfig() {
         return instance;
     }
@@ -29,37 +30,19 @@ public class SystemConfig extends HashMap<Object, Object>{
     private static final String YAML_SUFFIX = ".yml";
     private static final String SPRING_PROFILES_ACTIVATE = "spring.profiles.active";
     private static final String APPLICATION_PATH = "application.yml";
-    private List<String> keyList;
-    {
-        keyList = new ArrayList<>(5);
-        keyList.add("a1");
-        keyList.add("a2");
-        keyList.add("a3");
-        keyList.add("a4");
-        keyList.add("a5");
-    }
-    private SystemConfig() {
-        init();
-    }
-    private void init() {
-        String activateYml = getActivateYml();
-        activateMap = getMapFromYaml(activateYml);
+//    private List<String> keyList;
+//    {
+//        keyList = new ArrayList<>(5);
+//        keyList.add("a1");
+//        keyList.add("a2");
+//        keyList.add("a3");
+//        keyList.add("a4");
+//        keyList.add("a5");
+//    }
 
-        // 将数据库中定义的键存入SystemConfig中
-        for (Object object : activateMap.entrySet()) {
-            Entry entry = (Entry)object;
-            super.put(entry.getKey(), entry.getValue());
-        }
-    }
-
-    public void reload() {
-        super.clear();
-        this.init();
-    }
-
-    public List<String> getConfigNames () {
-        return keyList;
-    }
+//    public List<String> getConfigNames () {
+//        return keyList;
+//    }
 
     @Override
     public Object get(Object key) {
@@ -73,18 +56,18 @@ public class SystemConfig extends HashMap<Object, Object>{
         return null;
     }
 
-    public boolean update(Object key, Object value) {
-        if (this.containsKey(key)) {
-            this.put(key, value);
-
-            // update activate resource
-            if (this.activateMap.containsKey(key)) {
-
-            }
-            return true;
-        }
-        return false;
-    }
+//    public boolean update(Object key, Object value) {
+//        if (this.containsKey(key)) {
+//            this.put(key, value);
+//
+//            // update activate resource
+//            if (this.activateMap.containsKey(key)) {
+//
+//            }
+//            return true;
+//        }
+//        return false;
+//    }
 
 
     private Object superGet(Object key) {

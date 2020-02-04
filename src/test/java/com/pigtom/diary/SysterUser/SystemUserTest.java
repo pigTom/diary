@@ -3,13 +3,15 @@ package com.pigtom.diary.SysterUser;
 import com.pigtom.diary.common.PageList;
 import com.pigtom.diary.model.bean.SystemUser;
 import com.pigtom.diary.model.query.SystemUserQuery;
+import com.pigtom.diary.model.test.SpringTest;
 import com.pigtom.diary.service.SystemUserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
 
 /**
  * @author tangdunhong
@@ -23,11 +25,6 @@ public class SystemUserTest {
     @Autowired
     private SystemUserService systemUserService;
 
-    @Value("${value}")
-    private String name;
-
-    @Value("${a.tang.name}")
-    private String name2;
     @Test
     public void testPageList() {
         SystemUserQuery query = new SystemUserQuery();
@@ -35,9 +32,16 @@ public class SystemUserTest {
         System.out.println(pageList);
     }
 
+//    @Autowired
+//    SpringTest springTest;
+
     @Test
-    public void testName() {
-        System.out.println(name);
-        System.out.println(name2);
+    public void testValue() {
+        WebApplicationContext webApplicationContext = ContextLoader.getCurrentWebApplicationContext();
+        if (webApplicationContext != null) {
+            SpringTest springTest = (SpringTest)webApplicationContext.getBean("springTest");
+            System.out.println(springTest.name);
+        }
+
     }
 }
