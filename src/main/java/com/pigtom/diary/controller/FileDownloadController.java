@@ -35,12 +35,8 @@ public class FileDownloadController {
 
         String file = System.getProperty("user.dir");
         file = file.concat("/src/main/resources/jls8.pdf");
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-//        headers.setContentDispositionFormData("attachment", "aa");
         byte[] buffer = new byte[1024];
         FileInputStream fileInputStream = null;
-        BufferedInputStream reader = null;
         OutputStream os = null;
         try {
             long fileLength = new File(file).length();
@@ -48,7 +44,6 @@ public class FileDownloadController {
             response.setHeader("Content-Length", String.valueOf(fileLength));
 
             fileInputStream = new FileInputStream(new File(file));
-            reader = new BufferedInputStream(fileInputStream);
             os = response.getOutputStream();
             int i = fileInputStream.read(buffer);
             while (i != -1) {
@@ -62,8 +57,8 @@ public class FileDownloadController {
                 if (os != null) {
                     os.close();
                 }
-                if (reader != null) {
-                    reader.close();
+                if (fileInputStream != null) {
+                    fileInputStream.close();
                 }
             } catch (IOException e) {
                 e.printStackTrace();

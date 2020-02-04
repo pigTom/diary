@@ -36,6 +36,15 @@ public class test {
                 outputStream.write("hello world".getBytes("utf-8"));
             } catch (IOException e) {
                 e.printStackTrace();
+            } finally {
+                if (outputStream != null) {
+                    try {
+                        outputStream.close();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -64,6 +73,22 @@ public class test {
 //        System.out.println(md5);
         System.out.println(Long.MAX_VALUE);
 
+    }
+
+    @Test
+    public void testDate() {
+        Calendar calendar = Calendar.getInstance();
+//        calendar.add(Calendar.DAY_OF_MONTH, 0);
+//        calendar.add(Calendar.DAY_OF_WEEK, -1);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.setFirstDayOfWeek(Calendar.SUNDAY);
+//        calendar.set(Calendar.DAY_OF_WEEK, 7);
+        System.out.println(calendar.get(Calendar.DAY_OF_WEEK));
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+        System.out.println(calendar);
+        System.out.println(calendar.getTime());
     }
 
     @Test
@@ -122,10 +147,10 @@ public class test {
         System.out.println(data);
     }
 
-    @Test
-    public void testGenericType() throws Exception{
-        A.desc();
-    }
+//    @Test
+//    public void testGenericType() throws Exception{
+//        A.desc();
+//    }
 
 
     @Test
@@ -150,22 +175,39 @@ public class test {
         testDelete(list);
         System.out.println("list = " + list);;
     }
+
+    @Test
+    public void testParseInt() {
+        String num = "19:54";
+        String[] ns = num.split(":");
+        System.out.println(Integer.parseInt(ns[0]) + "： " + Integer.parseInt(ns[1]));
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        System.out.println(calendar.getTime());
+        calendar.add(Calendar.HOUR_OF_DAY, Integer.parseInt(ns[0]));
+        calendar.add(Calendar.MINUTE, Integer.parseInt(ns[1]));
+        System.out.println(calendar.getTime());
+    }
 }
 
-enum A{
-     a(1);
-     A(int i){};
-    int value;
-
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-   public static void desc() {
-       System.out.println("Hello World");
-   }
-}
+//enum A{
+//     a(1);
+//     A(int i){};
+//    int value;
+//
+//    public void setValue(int value) {
+//        this.value = value;
+//    }
+//
+//    public int getValue() {
+//        return value;
+//    }
+//
+//   public static void desc() {
+//       System.out.println("Hello World");
+//   }
+//}

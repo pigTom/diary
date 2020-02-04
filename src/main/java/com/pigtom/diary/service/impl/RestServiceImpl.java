@@ -2,6 +2,7 @@ package com.pigtom.diary.service.impl;
 
 import com.pigtom.diary.common.ResponseEntity;
 import com.pigtom.diary.model.bean.SystemConfigDTO;
+import com.pigtom.diary.model.bean.SystemConfigList;
 import com.pigtom.diary.service.RestService;
 import com.pigtom.diary.util.SystemConfig;
 import org.slf4j.Logger;
@@ -14,9 +15,9 @@ import org.yaml.snakeyaml.Yaml;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,10 +34,8 @@ public class RestServiceImpl implements RestService {
     private RestTemplate restTemplate;
 
     @Override
-    public void
-
-    forwardRequest(List<SystemConfigDTO> systemConfigDTOS) {
-        for (SystemConfigDTO dto : systemConfigDTOS) {
+    public void forwardRequest(SystemConfigList listS) {
+        for (SystemConfigDTO dto : listS.getList()) {
             String url = dto.getUrl();
             logger.info("request start: " + new Date());
             ResponseEntity response = restTemplate.postForObject(url,  dto,ResponseEntity.class);
@@ -56,6 +55,7 @@ public class RestServiceImpl implements RestService {
         logger.info(file.getAbsolutePath());
         Yaml yaml = new Yaml();
         Map map;
+        FileWriter fileWriter = null;
         try {
             // 优先读取jar包目录下的配置文件
             if (!file.exists()) {
@@ -73,7 +73,7 @@ public class RestServiceImpl implements RestService {
                 Map.Entry entry = (Map.Entry)o;
                 logger.info(entry.getKey()+ ": " + entry.getValue());
             }
-            FileWriter fileWriter = new FileWriter(file);
+            fileWriter = new FileWriter(file);
             fileWriter.write(yamlStr);
             fileWriter.flush();
             fileWriter.close();
@@ -81,6 +81,14 @@ public class RestServiceImpl implements RestService {
             logger.info("更新文件成功");
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            if (fileWriter != null) {
+                try {
+                    fileWriter.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

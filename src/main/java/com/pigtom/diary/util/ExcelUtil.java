@@ -30,8 +30,7 @@ public class ExcelUtil {
 
     private static final String XLS = "xls";
     private static final String XLSX = "xlsx";
-    private static final DateFormat FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-
+    private static ThreadLocal<DateFormat> DATEFORMAT_MAP = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy/MM/dd HH:mm:ss"));
     public static void handleResponse(HttpServletRequest request, HttpServletResponse response, String filename)
     throws UnsupportedEncodingException{
         filename = filename +"." +  XLSX;
@@ -198,8 +197,8 @@ public class ExcelUtil {
     public static <T> void writeDataToWorkbook(List<String> title, List<List<T>> data, Workbook book, int page) {
         Sheet sheet = book.getSheetAt(page);
 
-        Row row = null;
-        Cell cell = null;
+        Row row;
+        Cell cell;
 
         // 设置表头
         if (null != title && !title.isEmpty()) {
@@ -395,7 +394,7 @@ public class ExcelUtil {
         } else if (value instanceof Boolean) {
             cell.setCellValue((Boolean) value);
         } else if (value instanceof Date) {
-            cell.setCellValue(FORMAT.format((Date) value));
+            cell.setCellValue(DATEFORMAT_MAP.get().format((Date) value));
         } else if (value instanceof Double) {
             cell.setCellValue((Double) value);
         } else {
