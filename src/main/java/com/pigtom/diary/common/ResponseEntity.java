@@ -1,14 +1,11 @@
 package com.pigtom.diary.common;
 
-import lombok.Data;
-
 /**
  * @author tangdunhong
  * @blame tangdunhong
  * @module diary
  * @since 2019/10/9 8:03 PM
  **/
-@Data
 public class ResponseEntity<T> {
     private final static String SUCCESS = "success";
     private final static String FAILED = "failed";
@@ -59,5 +56,45 @@ public class ResponseEntity<T> {
 
     public static <T> ResponseEntity<T> failed(T data) {
         return new ResponseEntity<>(data, FAILED, false);
+    }
+
+    public static String getSUCCESS() {
+        return SUCCESS;
+    }
+
+    public static String getFAILED() {
+        return FAILED;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 }
